@@ -4,12 +4,8 @@ require_relative 'player'
 class Game
 
 	def initialize(player1 = Player.new("George Washington Carver", :red), player2 = Player.new("Kanye West", :black))
-
 		@player1 = player1
 		@player2 = player2
-
-		p @player1
-		p @player2
 		@board = Board.new
 	end
 
@@ -21,7 +17,6 @@ class Game
 					move = player.get_move
 
 					raise "wrong color" if player.color != @board[move[0]].color 
-					p move[0]
 					@board[move[0]].perform_moves!(move[1..-1])
 				rescue
 					puts "Invalid, please try again."
