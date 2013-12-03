@@ -24,7 +24,7 @@ class Game
 				end
 			end
 		end
-		Puts "Game Over!"
+		puts "Game Over!"
 	end
 
 end
