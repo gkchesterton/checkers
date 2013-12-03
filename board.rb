@@ -40,8 +40,8 @@ class Board
 	def setup_grid
 		black = (0..3).to_a
 		red = (6..9).to_a
-		setup_side([1], :black)
-		setup_side([2], :red)
+		setup_side(black, :black)
+		setup_side(red, :red)
 	end
 
 	def setup_side(side, color)

@@ -1,5 +1,7 @@
+require 'debugger'
+
 class Piece 
-	attr_accessor :position, :promoted
+	attr_accessor :position, :promoted, :board 
 	attr_reader :color
 
 	DIFFS = [[-1, -1], [-1, 1], [1, -1], [1, 1]]
@@ -27,13 +29,11 @@ class Piece
 
 	def out_of_bounds?(pos)
 		y, x = pos
-		!y.between?(0, 9)
-		!x.between?(0, 9)
+		!y.between?(0, 9) || !x.between?(0, 9)
 	end
 
 	def perform_jump(pos)
 		jump = possible_jumps.select { |coords| coords[1] == pos }
-
 		if !jump.empty?
 			jumped_space = jump[0][0]
 			@board[@position] = nil
@@ -83,7 +83,7 @@ class Piece
 	end
 
 	def possible_jumps
-		possible_jumps = []
+		jumps = []
 		diffs.each do |diff|
 			y, x = @position
 			dy, dx = diff
@@ -91,13 +91,14 @@ class Piece
 			jumped_space = [y, x]
 			y += dy; x += dx;
 			landing_space = [y, x]
+			next if out_of_bounds?(jumped_space)
 			next if out_of_bounds?(landing_space)
-			if (!@board[jumped_space].nil? && 
-					@board[jumped_space].color != @color) && @board[landing_space].nil?
-				possible_jumps << [jumped_space, landing_space] 		
+			if (!self.board[jumped_space].nil? && 
+					self.board[jumped_space].color != self.color) && self.board[landing_space].nil?
+				jumps << [jumped_space, landing_space] 		
 			end
 		end
-		possible_jumps
+		jumps
 	end
 
 	def possible_slides
@@ -134,7 +135,8 @@ class Piece
 		begin
 			dup_board[@position].perform_moves(move_sequence)
 			return true
-		rescue
+		rescue => error 
+			p error.message
 			return false
 		end
 	end
