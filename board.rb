@@ -2,6 +2,7 @@ require 'colorize'
 require_relative 'piece'
 
 class Board
+	attr_accessor :red_count, :black_count
 
 	def initialize
 		@grid = Array.new (10) {Array.new(10) { nil } }
@@ -41,8 +42,8 @@ class Board
 	def setup_grid
 		black = (0..3).to_a
 		red = (6..9).to_a
-		setup_side(black, :black)
-		setup_side(red, :red)
+		setup_side([1], :black)
+		setup_side([2], :red)
 	end
 
 	def setup_side(side, color)

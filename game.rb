@@ -13,9 +13,9 @@ class Game
 		until @board.over?
 			[@player1, @player2].each do |player|
 				puts @board
+				break if @board.over?
 				begin	
 					move = player.get_move
-
 					raise "wrong color" if player.color != @board[move[0]].color 
 					@board[move[0]].perform_moves!(move[1..-1])
 				rescue
@@ -24,6 +24,7 @@ class Game
 				end
 			end
 		end
+		Puts "Game Over!"
 	end
 
 end

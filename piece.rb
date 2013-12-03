@@ -41,6 +41,11 @@ class Piece
 			@board[jumped_space] = nil
 			@position = pos
 			@promoted = promote? unless @promoted == true
+			if @color == :red
+				@board.red_count -= 1
+			else
+				@board.black_count -= 1
+			end
 		else
 			raise InvalidMoveError, "Invalid move!"
 		end
