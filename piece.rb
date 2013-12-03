@@ -2,7 +2,7 @@ class Piece
 	attr_accessor :position, :promoted
 	attr_reader :color
 
-	DIFFS = [[-1, -1], [-1, 1], [1, -1],[1, 1]]
+	DIFFS = [[-1, -1], [-1, 1], [1, -1], [1, 1]]
 
 	def initialize(position, color, board)
 		@board = board
@@ -14,15 +14,15 @@ class Piece
 	def diffs
 		if @promoted
 			return DIFFS
-		elsif @color == :black
-			DIFFS[2..3]
-		elsif @color == :red
-			DIFFS[0..1] 
+		else 
+			@color == :red ? DIFFS[0..1] : DIFFS[2..3]
 		end
 	end
 
 	def dup(new_board)
-		Piece.new(@position.dup, @color, new_board)
+		piece = Piece.new(@position.dup, @color, new_board)
+		piece.promoted = @promoted
+		piece
 	end
 
 	def out_of_bounds?(pos)
@@ -34,13 +34,13 @@ class Piece
 	def perform_jump(pos)
 		jump = possible_jumps.select { |coords| coords[1] == pos }
 
-		unless jump.empty?
+		if !jump.empty?
 			jumped_space = jump[0][0]
 			@board[@position] = nil
 			@board[pos] = self
 			@board[jumped_space] = nil
 			@position = pos
-			@promoted = promote?(pos) unless @promoted == true
+			@promoted = promote? unless @promoted == true
 		else
 			raise InvalidMoveError, "Invalid move!"
 		end
@@ -76,7 +76,7 @@ class Piece
 			@board[@position] = nil
 			@board[pos] = self
 			@position = pos
-			@promoted = promote?(pos) unless @promoted == true
+			@promoted = promote? unless @promoted == true
 		else
 			raise InvalidMoveError, "Invalid Move!"
 		end
@@ -113,11 +113,11 @@ class Piece
 		possible_slides
 	end
 
-	def promote?(pos)
+	def promote?
 		if @color == :red
-			pos[0] == 0
+			@position[0] == 0
 		elsif @color == :black
-			pos[0] == 9
+			@position[0] == 9
 		end
 	end
 
