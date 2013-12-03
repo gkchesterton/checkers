@@ -57,8 +57,6 @@ class Board
 	end
 
 	def to_s
-		row_i = 0
-		col_i = 0
 		@grid.each_with_index.map do |row, row_index|
 			row.each_with_index.map do |col, col_index| 
 				if col.nil?
